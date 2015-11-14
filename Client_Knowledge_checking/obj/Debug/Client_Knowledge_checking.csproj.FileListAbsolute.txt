@@ -1,0 +1,17 @@
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\bin\Debug\Client_Knowledge_checking.exe.config
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\bin\Debug\Client_Knowledge_checking.exe
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\bin\Debug\Client_Knowledge_checking.pdb
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\Client_Knowledge_checking.csprojResolveAssemblyReference.cache
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\MainWindow.g.cs
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\App.g.cs
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\Client_Knowledge_checking_MarkupCompile.cache
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\Client_Knowledge_checking_MarkupCompile.lref
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\MainWindow.baml
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\Client_Knowledge_checking.g.resources
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\Client_Knowledge_checking.Properties.Resources.resources
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\Client_Knowledge_checking.csproj.GenerateResource.Cache
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\Client_Knowledge_checking.exe
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\Client_Knowledge_checking.pdb
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\LogInWindow.g.cs
+c:\users\maciek\documents\visual studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\LogInWindow.baml
+C:\Users\maciek\Documents\Visual Studio 2015\Projects\Client_Knowledge_checking\Client_Knowledge_checking\obj\Debug\App.baml
