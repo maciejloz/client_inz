@@ -9,37 +9,37 @@ namespace Client_Knowledge_checking.Report
 {
     static class Checker
     {
-        static string[] tabWithLetters = new string[5] { "A", "B", "C", "D", "E" };
+        public static string[] tabWithLetters = new string[5] { "A", "B", "C", "D", "E" };
 
         public static void processAnswer(Test.Question question)
         {
             string textContentForOpen = question.Content;
             string imageContentForOpen = question.ContentForImageQuestion;
-
             if (question.IsOpen)
             {
                 string answerForOpen = question.AnswersProperty[0].AnswerForOpen;
 
                 if (question.IsImageQuestionVisible && question.IsTextQuestionVisible)
-                    Report.Instance.GetAnswerForQuestion(textContentForOpen, imageContentForOpen, answerForOpen);
+                    ReportGenerator.Instance.GetAnswerForQuestion(textContentForOpen, imageContentForOpen, answerForOpen);
                 else if(!question.IsImageQuestionVisible && question.IsTextQuestionVisible)
-                    Report.Instance.GetAnswerForQuestion(textContentForOpen, null, answerForOpen);
+                    ReportGenerator.Instance.GetAnswerForQuestion(textContentForOpen, null, answerForOpen);
                 else if (question.IsImageQuestionVisible && !question.IsTextQuestionVisible)
-                    Report.Instance.GetAnswerForQuestion(null, imageContentForOpen, answerForOpen);
+                    ReportGenerator.Instance.GetAnswerForQuestion(null, imageContentForOpen, answerForOpen);
             }
             else
             {
                 //internal void GetAnswerForQuestion(string textQuestionContent = null, string imageQuestionContent = null, string answerForOpen = null, List<string> answersForClosed = null, string rightAnswersForClosed = null, string realAnswers = null, bool isCorrect = false)
                 string realAnswers = CreateStringWithAnswers(question);
                 bool isCorrect = checkIfCorrect(question, realAnswers);
-                List<string> answersForClosed = ChangeAnswerPropertyIntoList(question);
-               
+                List<string> answersForClosed = GetInfoFromPropertyIntoList(question);
+                List<bool> isAnswerAsImage = InsertInfoIfAnswerIsImage(question);
+
                 if (question.IsImageQuestionVisible && question.IsTextQuestionVisible)
-                    Report.Instance.GetAnswerForQuestion(textContentForOpen, imageContentForOpen, null , answersForClosed, question.RightAnswer, realAnswers, isCorrect );
+                    ReportGenerator.Instance.GetAnswerForQuestion(textContentForOpen, imageContentForOpen, null ,  answersForClosed, question.RightAnswer, realAnswers, isCorrect, isAnswerAsImage);
                 else if (!question.IsImageQuestionVisible && question.IsTextQuestionVisible)
-                    Report.Instance.GetAnswerForQuestion(textContentForOpen, null, null, answersForClosed, question.RightAnswer, realAnswers, isCorrect);
+                    ReportGenerator.Instance.GetAnswerForQuestion(textContentForOpen, null, null, answersForClosed, question.RightAnswer, realAnswers, isCorrect, isAnswerAsImage);
                 else if (question.IsImageQuestionVisible && !question.IsTextQuestionVisible)
-                    Report.Instance.GetAnswerForQuestion(null, imageContentForOpen, null, answersForClosed, question.RightAnswer, realAnswers, isCorrect);
+                    ReportGenerator.Instance.GetAnswerForQuestion(null, imageContentForOpen, null, answersForClosed, question.RightAnswer, realAnswers, isCorrect, isAnswerAsImage);
             }
         }
 
@@ -47,9 +47,7 @@ namespace Client_Knowledge_checking.Report
         {
             bool isCorrect = false;
             string rightAnswer = question.RightAnswer;
-            //string[] rightAnswerTab = rightAnswer.Split(',');
-            // var enumerator = question.AnswersProperty.GetEnumerator();
-            // question.AnswersProperty[0].IsChecked;
+
             if (rightAnswer == realAnswers)
                 isCorrect = true;        
             return isCorrect;    
@@ -59,25 +57,38 @@ namespace Client_Knowledge_checking.Report
         {
             int iter = 0;
             string realAnswer = "";
+
             foreach (Test.Question.Answer ans in question.AnswersProperty)
             {
-                iter = question.AnswersProperty.IndexOf(ans);
+                //iter = question.AnswersProperty.IndexOf(ans);
                 if (ans.IsChecked)
                     realAnswer = realAnswer + tabWithLetters[iter] + ',';
-                if (question.AnswersProperty.Last() == ans)
+                if (question.AnswersProperty.Last() == ans && realAnswer != "")
                     realAnswer = realAnswer.Remove(realAnswer.Length - 1);
+                iter++;
             }
             return realAnswer;
         }
 
-        private static List<string> ChangeAnswerPropertyIntoList(Question question)
+        private static List<string> GetInfoFromPropertyIntoList(Question question)
         {
             List<string> answersForClosed = new List<string>();
+
             foreach (Test.Question.Answer ans in question.AnswersProperty)
             {
                 answersForClosed.Add(ans.AnswerContent);
             }
             return answersForClosed;
+        }
+
+        private static List<bool> InsertInfoIfAnswerIsImage(Question question)
+        {
+            List<bool> ifAnswerIsImage = new List<bool>();
+            foreach (Test.Question.Answer ans in question.AnswersProperty)
+            {
+                ifAnswerIsImage.Add(ans.isImage);
+            }
+            return ifAnswerIsImage;
         }
 
     }

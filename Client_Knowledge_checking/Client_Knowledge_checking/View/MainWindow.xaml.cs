@@ -59,7 +59,10 @@ namespace Client_Knowledge_checking
             bool Result = false;
 
             if (Utilities.MockedTestFile.isFileMocked)
+            {
+                Connection.ClientConnection.Instance.InitializeInstance(clientName, ip, portNumber);
                 return true;
+            }
             else
             {
                 Connection.ClientConnection.Instance.InitializeInstance(clientName, ip, portNumber);

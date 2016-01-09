@@ -63,6 +63,7 @@ namespace Client_Knowledge_checking.Test
                     listWithQuestions.Add(question);
                 }
             }
+            initializeReportWrapper(lines[0]);
 
         }
 
@@ -83,7 +84,7 @@ namespace Client_Knowledge_checking.Test
             }
             else//(type == typeOfQuestion.close)
             {
-                const string patternForCloseQuestion = @".*Tresc:""(.*?)""; Odpowiedz_A:""(.*?)""; Odpowiedz_B:""(.*?)""; Odpowiedz_C:""(.*?)""; Odpowiedz_D:""(.*?)""; Odpowiedz_E:""(.*?)""; Prawidlowa:""(.)""; Czas:""(\d{2,3})"".";
+                const string patternForCloseQuestion = @".*Tresc:""(.*?)""; Odpowiedz_A:""(.*?)""; Odpowiedz_B:""(.*?)""; Odpowiedz_C:""(.*?)""; Odpowiedz_D:""(.*?)""; Odpowiedz_E:""(.*?)""; Prawidlowa:""(.*?)""; Czas:""(\d{2,3})"".";
                 Regex rExtractForClose = new Regex(patternForCloseQuestion, RegexOptions.IgnoreCase);
                 Match mExtractForClose = rExtractForClose.Match(line);
                 Group g0_close = mExtractForClose.Groups[0];
@@ -108,6 +109,14 @@ namespace Client_Knowledge_checking.Test
             return question;
         }
 
+        private static void initializeReportWrapper(string firstLine)
+        {
+            string titleOfTest = firstLine;
+            if (titleOfTest.Substring(0, 5) != "*****")
+                titleOfTest = "Sprawdzian wiedzy";
+            Report.ReportGenerator.Instance.InitializeReport(titleOfTest, Connection.ClientConnection.Instance.clientName);
+        }
+
         private async static void StartTest()
         {
             System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
@@ -122,13 +131,14 @@ namespace Client_Knowledge_checking.Test
                 //dispatcherTimer.Stop();
                 mainWindow.ChangeContext(qst);
                 //await Task.Delay(qst.TimeToAnswer*1000);
-                await WaitigForTimer(qst, ref dispatcherTimer);
+                await WaitingForTimer(qst, ref dispatcherTimer);
                 //mainWindow.
                 Report.Checker.processAnswer(qst);
             }
+            Report.ReportGenerator.Instance.GenerateReport();
         }
 
-        private static Task WaitigForTimer(Question qst, ref System.Windows.Threading.DispatcherTimer dt)
+        private static Task WaitingForTimer(Question qst, ref System.Windows.Threading.DispatcherTimer dt)
         {
             int sumOfTicks = 0;
             int neededTicks = qst.TimeToAnswer;
