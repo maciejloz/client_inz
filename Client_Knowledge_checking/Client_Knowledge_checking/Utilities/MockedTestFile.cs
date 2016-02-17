@@ -11,6 +11,6 @@ namespace Client_Knowledge_checking.Utilities
     {
         //public static string zippedPath = @"C:\Users\maciek\Documents\Testy\Mocked";
         public static FileStream fileWithTest = null;
-        public static bool isFileMocked = true;
+        public static bool isFileMocked = false;
     }
 }

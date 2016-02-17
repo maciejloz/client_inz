@@ -20,6 +20,7 @@ namespace Client_Knowledge_checking.Test
         private static int time;
         private static MainWindow mainWindow;
         private static bool dispatcherTimerTick = true;
+        public static System.Windows.Threading.DispatcherTimer dispatcherTimer;
 
         //regexp_1_Z:
         //.*Tresc:"(.*?)", Odpowiedz_A:"(.*?)", Odpowiedz_B:"(.*?)", Odpowiedz_C:"(.*?)", Odpowiedz_D:"(.*?)", Odpowiedz_E:"(.*?)", Prawidlowa:"(.)", Czas:"(\d{2,3})".
@@ -119,39 +120,34 @@ namespace Client_Knowledge_checking.Test
 
         private async static void StartTest()
         {
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             foreach (var qst in listWithQuestions)
             {
-                //dispatcherTimerTick = false;
-                //mainWindow.ChangeContext(qst);
-                //dispatcherTimer.Interval = new TimeSpan(0, 0, qst.TimeToAnswer);
-                //dispatcherTimer.Tick += DispatcherTimer_Tick;
-                //dispatcherTimer.Start();
-                //while (!dispatcherTimerTick);
-                //dispatcherTimer.Stop();
                 mainWindow.ChangeContext(qst);
-                //await Task.Delay(qst.TimeToAnswer*1000);
-                await WaitingForTimer(qst, ref dispatcherTimer);
-                //mainWindow.
+                await WaitingForTimer(qst, dispatcherTimer);
                 Report.Checker.processAnswer(qst);
             }
             Report.ReportGenerator.Instance.GenerateReport();
+            dispatcherTimer.Stop();
+            MessageBox.Show("Zakończyłeś sprawdzian wiedzy. Czekaj cierpliwie na wyniki!");
+            mainWindow.PrepareTermination();
         }
 
-        private static Task WaitingForTimer(Question qst, ref System.Windows.Threading.DispatcherTimer dt)
+        private static Task WaitingForTimer(Question qst, System.Windows.Threading.DispatcherTimer dt)
         {
             int sumOfTicks = 0;
             int neededTicks = qst.TimeToAnswer;
             dispatcherTimerTick = false;
-            //dt.Interval = new TimeSpan(0, 0, qst.TimeToAnswer);
             dt.Interval = new TimeSpan(0, 0, 1);
-            //dt.Tick += DispatcherTimer_Tick;
             dt.Tick += (sender, e) => { Dt_Tick(sender, e, ref sumOfTicks, neededTicks); };
             dt.Start();
             Task task = Task.Run(() =>
             {
-                //while (!dispatcherTimerTick) ;
-                while (sumOfTicks <= qst.TimeToAnswer) ;
+                while (sumOfTicks <= qst.TimeToAnswer)
+                {
+                    if (!dt.IsEnabled)
+                        break;
+                };
             });
             return task;
         }
@@ -160,6 +156,12 @@ namespace Client_Knowledge_checking.Test
         {
             sumOfTicks += 1;
             mainWindow.timerLabel.Content = (neededTicks - sumOfTicks + 1);
+        }
+
+        public static void DisruptTicker()
+        {
+            dispatcherTimer.Stop();
+
         }
 
         //private static EventHandler DispatcherTimer_Tick(ref int sumOfTicks)

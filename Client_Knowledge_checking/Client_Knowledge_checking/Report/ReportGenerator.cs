@@ -11,12 +11,12 @@ namespace Client_Knowledge_checking.Report
 {
     public sealed class ReportGenerator
     {
-        private string reportPath;
         private StringWriter stringWriter;
         HtmlTextWriter writer;
         int questionNumerator;
         enum TypeOfQuestion { isImgIsTxt, isTxt, isImg };
         private static ReportGenerator single_oInstance = null;
+        public string reportPath = "";
 
         public static ReportGenerator Instance
         {
@@ -43,7 +43,6 @@ namespace Client_Knowledge_checking.Report
             writer.RenderBeginTag(HtmlTextWriterTag.Html);
             writer.RenderBeginTag(HtmlTextWriterTag.Head);
             writer.WriteLine(@"<meta charset =""utf-8"">");
-            //writer.WriteAttribute(@"charset", "utf-8");
             writer.RenderBeginTag(HtmlTextWriterTag.H1);
             writer.Write(titleOfTest);
             writer.RenderEndTag();
@@ -142,6 +141,16 @@ namespace Client_Knowledge_checking.Report
                     writer.RenderEndTag();
                     writer.RenderEndTag();
                     writer.WriteLine();
+                    break;
+                case TypeOfQuestion.isImg:
+                    writer.RenderBeginTag(HtmlTextWriterTag.B);
+                    writer.RenderBeginTag(HtmlTextWriterTag.P);
+                    writer.WriteLine("Pytanie nr " + questionNumerator.ToString());
+                    writer.RenderEndTag();
+                    writer.RenderEndTag();
+                    writer.AddAttribute(HtmlTextWriterAttribute.Src, imageQuestionContent);
+                    writer.RenderBeginTag(HtmlTextWriterTag.Img);
+                    writer.RenderEndTag();
                     break;
             }
         }

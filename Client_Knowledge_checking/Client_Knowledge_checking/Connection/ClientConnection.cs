@@ -59,7 +59,7 @@ namespace Client_Knowledge_checking.Connection
             {
                 TypeOfReceivedServerMessage = new Dictionary<string, string>();
                 TypeOfReceivedServerMessage.Add("Response To Logging", "All OK");
-                TypeOfReceivedServerMessage.Add("ResponseToSendingReport", "Report OK");
+                TypeOfReceivedServerMessage.Add("ResponseToSendingReport", "Report is Ok");
                 TypeOfReceivedServerMessage.Add("GettingTest", "Test was sent");
             }
         }
@@ -76,9 +76,8 @@ namespace Client_Knowledge_checking.Connection
                 sendBytes = Encoding.ASCII.GetBytes(clientName);
                 networkStream.Write(sendBytes, 0, sendBytes.Length);
                 networkStream.Flush();
-                GetServerResponse();
+                GetServerResponse(TypeOfReceivedServerMessage["Response To Logging"]);
                 returnedValue = true;
-
             }
             catch(SocketException ex)
             {
@@ -113,7 +112,7 @@ namespace Client_Knowledge_checking.Connection
             //} while (_networkStream.Length == 0);
         }
 
-        private void GetServerResponse()
+        public void GetServerResponse(string desireFeedback)
         {
             byte[] myReadBuffer = new byte[1024];
             StringBuilder myCompleteMessage = new StringBuilder();
@@ -130,8 +129,9 @@ namespace Client_Knowledge_checking.Connection
                         numberOfBytesRead = networkStream.Read(myReadBuffer, 0, myReadBuffer.Length);// myReadBuffer.Length);
                         myCompleteMessage.AppendFormat("{0}", Encoding.ASCII.GetString(myReadBuffer, 0, numberOfBytesRead));
                     } while (networkStream.DataAvailable);
+                    networkStream.Flush();
 
-                    if (!(myCompleteMessage.ToString() == TypeOfReceivedServerMessage["Response To Logging"]))
+                    if (!(myCompleteMessage.ToString() == desireFeedback))
                         throw new System.Exception("Problem z odebraniem wszystkich danych z serwera");
                 }
                 else
@@ -171,6 +171,15 @@ namespace Client_Knowledge_checking.Connection
             return task;
         }
 
+        internal Task WaitForConfirmation()
+        {
+            Task task = Task.Run(() =>
+            {
+                while (networkStream.DataAvailable == false) ;
+            });
+            return task;
+        }
+
         internal TestFile GetTestFromServer()
         {
             Int64 catchedBytes = 0;
@@ -191,6 +200,7 @@ namespace Client_Knowledge_checking.Connection
                         fileWithTest.Write(buffer, 0, countOfBytes);
                         catchedBytes += countOfBytes;
                     }
+                    networkStream.Flush();
                     testFile.fileWithTest = fileWithTest;
                 }
 
@@ -228,6 +238,44 @@ namespace Client_Knowledge_checking.Connection
                 testFile = null;
             }
             return testFile;
+        }
+
+        internal Task SendHtmlReport()
+        {
+            Task task = Task.Run(() =>
+            {
+                using (var fileIO = File.OpenRead(Report.ReportGenerator.Instance.reportPath))
+                {
+                    try
+                    {
+                        Instance.networkStream.Write(BitConverter.GetBytes(fileIO.Length), 0, 8);
+                        var buffer = new byte[1024 * 8];
+                        int count;
+
+                        while ((count = fileIO.Read(buffer, 0, buffer.Length)) > 0)
+                            Instance.networkStream.Write(buffer, 0, count);
+
+                        Instance.networkStream.Flush();
+                    }
+                    catch (ArgumentNullException ex)
+                    {
+                        MessageBox.Show("Z niewiadomych przyczyn bufor, w którym powinien się znajdować generowany raport, jest pusty");
+                    }
+                    catch (ArgumentOutOfRangeException ex)
+                    {
+                        MessageBox.Show("Wysyłany raport jest zbyt duży");
+                    }
+                    catch (IOException ex)
+                    {
+                        MessageBox.Show("Wybrane gniazdo po stronie klienta zostało wcześniej zakmnięte");
+                    }
+                    catch (ObjectDisposedException ex)
+                    {
+                        MessageBox.Show("Problem z odczytem danych z sieci");
+                    }
+                }
+            });
+            return task;
         }
 
     }

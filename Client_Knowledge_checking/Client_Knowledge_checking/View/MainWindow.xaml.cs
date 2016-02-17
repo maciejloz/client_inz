@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Client_Knowledge_checking.Test;
+using Client_Knowledge_checking.Connection;
 
 namespace Client_Knowledge_checking
 {
@@ -56,21 +57,22 @@ namespace Client_Knowledge_checking
 
         internal bool Connect(string clientName, IPAddress ip, int portNumber)
         {
-            bool Result = false;
+            bool result = false;
 
             if (Utilities.MockedTestFile.isFileMocked)
             {
-                Connection.ClientConnection.Instance.InitializeInstance(clientName, ip, portNumber);
-                return true;
+                ClientConnection.Instance.InitializeInstance(clientName, ip, portNumber);
+                result = false;
             }
             else
             {
-                Connection.ClientConnection.Instance.InitializeInstance(clientName, ip, portNumber);
-                if (Connection.ClientConnection.Instance.Connect() == true)
-                    return Result;
+                ClientConnection.Instance.InitializeInstance(clientName, ip, portNumber);
+                if (ClientConnection.Instance.Connect() == true)
+                    result = true;
                 else
-                    return Result;
+                    result = false;
             }
+            return result;
         }
 
         internal async void WaitForTestWrapper()
@@ -86,7 +88,7 @@ namespace Client_Knowledge_checking
             {
                 Func<TestFile> indicatorToGetTestFromServer = new Func<TestFile>(() => Connection.ClientConnection.Instance.GetTestFromServer());
 
-                await Connection.ClientConnection.Instance.WaitForTest();
+                await ClientConnection.Instance.WaitForTest();
                 testFile = await Task.Run<TestFile>(indicatorToGetTestFromServer);
             }
             //TestFile testFile = null;
@@ -102,6 +104,14 @@ namespace Client_Knowledge_checking
             Test.Interpreter.StartInterpreting(testFile, this);
         }
 
+        public async void PrepareTermination()
+        {
+            await ClientConnection.Instance.SendHtmlReport();
+            await ClientConnection.Instance.WaitForConfirmation();
+            ClientConnection.Instance.GetServerResponse(Client_Knowledge_checking.Connection.ClientConnection.TypeOfReceivedServerMessage["ResponseToSendingReport"]);
+            this.Close();
+        }
+
         private void CancelTest()
         {
             logInWindowInstance.StartAgain();
@@ -115,7 +125,7 @@ namespace Client_Knowledge_checking
 
         private void nextQuestion_button_Click(object sender, RoutedEventArgs e)
         {
-
+            Interpreter.DisruptTicker();
         }
     }
 }
