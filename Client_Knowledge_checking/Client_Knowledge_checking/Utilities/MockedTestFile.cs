@@ -9,8 +9,7 @@ namespace Client_Knowledge_checking.Utilities
 {
     public static class MockedTestFile
     {
-        //public static string zippedPath = @"C:\Users\maciek\Documents\Testy\Mocked";
-        public static FileStream fileWithTest = null;
+        public static FileStream fileWithTest = File.Open(@"C:\Users\maciek\Desktop\test.zip", FileMode.Open);
         public static bool isFileMocked = false;
     }
 }

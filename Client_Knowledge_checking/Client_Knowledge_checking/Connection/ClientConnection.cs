@@ -73,7 +73,7 @@ namespace Client_Knowledge_checking.Connection
                 tcpClient.Connect(serverIpAddress, portNumber);
                 networkStream = tcpClient.GetStream();
                 Byte[] sendBytes = null;
-                sendBytes = Encoding.ASCII.GetBytes(clientName);
+                sendBytes = Encoding.UTF8.GetBytes(clientName);// Encoding.ASCII.GetBytes(clientName);
                 networkStream.Write(sendBytes, 0, sendBytes.Length);
                 networkStream.Flush();
                 GetServerResponse(TypeOfReceivedServerMessage["Response To Logging"]);
@@ -192,7 +192,7 @@ namespace Client_Knowledge_checking.Connection
                 Int64 numberOfBytes = BitConverter.ToInt64(buffer, 0);
                 testFile = new TestFile();
                 AppDomain.CurrentDomain.ProcessExit += new EventHandler(testFile.Dispose);//(testFile.Dispose);
-
+                Directory.CreateDirectory(testFile.unzippedTestPath);
                 using (var fileWithTest = File.Create(testFile.zippedTestPath))
                 {
                     while (catchedBytes < numberOfBytes && (countOfBytes = networkStream.Read(buffer, 0, buffer.Length)) > 0)

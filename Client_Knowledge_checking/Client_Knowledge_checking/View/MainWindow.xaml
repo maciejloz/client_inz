@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client_Knowledge_checking"
         mc:Ignorable="d"
-        Title="Sprawdzanie wiedzy" Height="768" Width="1024">
+        Title="Sprawdzian wiedzy" Height="800" Width="1300"
+        ResizeMode="NoResize">
+
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <!--<DataTemplate x:Key="listBoxTextAnswerItem">
@@ -24,36 +26,37 @@
             </Border>
         </DataTemplate>-->
         <DataTemplate x:Key="listBoxForAnswerItem">
-            <Border BorderBrush="Red" BorderThickness="1" Padding="2" CornerRadius="3">
-                <StackPanel Name="ItemPanel" VerticalAlignment="Top" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="20">
-                    <Image MaxHeight="200" MaxWidth="150" Stretch="Fill" Visibility="{Binding IsImageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"  Source="{Binding Path=AnswerContent}"></Image>
-                    <TextBlock MaxWidth="150" Visibility="{Binding IsTextBlockVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Path=AnswerContent}" Foreground="Red"></TextBlock>
-                    <TextBox Visibility="{Binding IsOpen, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Path=AnswerForOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="600" Height="300" FontSize="16" FontFamily="Times New Roman"></TextBox>
-                    <CheckBox Visibility="{Binding IsNotOpen, Converter={StaticResource BooleanToVisibilityConverter}}" Padding="5" IsChecked="{Binding Path=IsChecked}"></CheckBox>
+            <Border BorderBrush="Red" BorderThickness="0.0" Padding="1" CornerRadius="0.6">
+                <StackPanel Name="ItemPanel" VerticalAlignment="Top" HorizontalAlignment="Stretch" Orientation="Horizontal" Margin="10">
+                    <Image MaxHeight="200" MaxWidth="200" HorizontalAlignment="Center" Stretch="Fill" Visibility="{Binding IsImageVisible, Converter={StaticResource BooleanToVisibilityConverter}}"  Source="{Binding Path=AnswerContent}"></Image>
+                    <TextBlock MaxWidth="200" Visibility="{Binding IsTextBlockVisible, Converter={StaticResource BooleanToVisibilityConverter}}" HorizontalAlignment="Center" Text="{Binding Path=AnswerContent}" TextWrapping="Wrap" Foreground="Black" FontSize="22" FontFamily="Times New Roman"></TextBlock>
+                    <TextBox Visibility="{Binding IsOpen, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Path=AnswerForOpen, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="900" Height="270" FontSize="16" FontFamily="Times New Roman"></TextBox>
+                    <CheckBox Visibility="{Binding IsCheckBoxVisible, Converter={StaticResource BooleanToVisibilityConverter}}" VerticalAlignment="top" Padding="5" IsChecked="{Binding Path=IsChecked}"></CheckBox>
                 </StackPanel>
             </Border>
         </DataTemplate>
 
     </Window.Resources>
-    <Grid>
+    <Grid Background="#CC709DFF" Opacity="0.8">
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="90"/>
             <RowDefinition Height="300"/>
             <RowDefinition Height="300"/>
-            <RowDefinition Height="98"/>
+            <RowDefinition Height="110"/>
         </Grid.RowDefinitions>
+        <Label Name="titleLabel" Content="Program sprawdzający wiedzę z Elektroniki i Elektrotechniki" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="20" FontSize="29.333" FontFamily="Segoe UI Black" />
         <Label Name="timerLabel" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,50,0" Content="0" FontSize="29.333" FontFamily="Segoe UI Black" />
-        <TextBlock x:Name="textBlock" Margin="0,0,-8,0" Grid.Row="1" TextWrapping="Wrap" Height="30" VerticalAlignment="Top" Visibility="{Binding IsTextQuestionVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Content}" FontSize="24" FontFamily="Segoe UI Black"/>
-        <Image Margin="0,80,20,0" Grid.Row="1" MaxHeight="200" MaxWidth="200" VerticalAlignment="Top" Stretch="Fill" Visibility="{Binding IsImageQuestionVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding ContentForImageQuestion}"  />
+        <TextBlock x:Name="textBlock" Margin="10,5,8,0" Grid.Row="1" TextWrapping="Wrap" Height="30" VerticalAlignment="Top" Visibility="{Binding IsTextQuestionVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Text="{Binding Content}" FontSize="26" FontFamily="Times New Roman"/>
+        <Image Margin="30,80,20,0" Grid.Row="1" MaxHeight="200" MaxWidth="300" VerticalAlignment="Top" HorizontalAlignment="Left" Stretch="Fill" Visibility="{Binding IsImageQuestionVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Source="{Binding ContentForImageQuestion}"  />
         <!--<Image x:Name="image" Margin="0,30,19,0" Grid.Row="1" Width="1024" Visibility="{Binding questionType}" Source="{Binding imageQuestionPath}"/>-->
 
-        <ListBox Name="listBoxTextAnswers" HorizontalContentAlignment="Center" Padding="5" Grid.Row="2" Width= "1024" Height="300" ItemsSource="{Binding AnswersProperty}" ItemTemplate="{StaticResource ResourceKey=listBoxForAnswerItem}" >
-            <ListBox.ItemsPanel>
+        <ItemsControl Name="listBoxTextAnswers" HorizontalContentAlignment="Center" Padding="3" Grid.Row="2" Width= "1250" Height="300" ItemsSource="{Binding AnswersProperty}" ItemTemplate="{StaticResource ResourceKey=listBoxForAnswerItem}" BorderThickness="1" HorizontalAlignment="Center" Background="#FFDAD9DE" >
+            <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal"></StackPanel>
                 </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-        </ListBox>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
         <!--<StackPanel Orientation="Horizontal"></StackPanel>
         </ListBox>-->
         <Button Name="nextQuestion_button" Grid.Row="3" Width="150" Height="50" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,40,30" Content="Następne" FontSize="18.667" FontFamily="Segoe UI Black" Click="nextQuestion_button_Click" />

@@ -129,7 +129,7 @@ namespace Client_Knowledge_checking.Test
             }
             Report.ReportGenerator.Instance.GenerateReport();
             dispatcherTimer.Stop();
-            MessageBox.Show("Zakończyłeś sprawdzian wiedzy. Czekaj cierpliwie na wyniki!");
+            Report.Checker.presentScore();
             mainWindow.PrepareTermination();
         }
 

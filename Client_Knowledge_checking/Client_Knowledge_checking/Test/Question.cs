@@ -114,8 +114,11 @@ namespace Client_Knowledge_checking.Test
             {
                 foreach (string ans in answers)
                 {
-                    Answer answer = new Answer(ans);
-                    AnswersProperty.Add(answer);
+                    if (ans != "")
+                    {
+                        Answer answer = new Answer(ans);
+                        AnswersProperty.Add(answer);
+                    }
                 }
             }
         }
@@ -161,7 +164,11 @@ namespace Client_Knowledge_checking.Test
                 get;
                 set;
             }
-
+            public bool IsCheckBoxVisible
+            {
+                get;
+                set;
+            }
             public Answer(string content)
             {
                 AnswerContent = content;
@@ -180,6 +187,7 @@ namespace Client_Knowledge_checking.Test
             {
                 answCont = AnswerContent;
                 checkIfIsPicture(ref answCont, ref isImage);
+                IsCheckBoxVisible = true;
                 if (isImage)
                 {
                     IsImageVisible = true;

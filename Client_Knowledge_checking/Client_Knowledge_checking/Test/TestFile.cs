@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace Client_Knowledge_checking.Test
 {
-    class TestFile
+    public class TestFile
     {
         public string zippedTestPath;
         public string unzippedTestPath;
@@ -17,31 +18,17 @@ namespace Client_Knowledge_checking.Test
 
         public TestFile()
         {
-            zippedTestPath = @"C:\Users\maciek\Desktop\file_test.zip";
-            unzippedTestPath  = @"C:\Users\maciek\Desktop\test\";
+            zippedTestPath = @"C:\test\file_test.zip";
+            unzippedTestPath = @"C:\test\";
             fileWithTestName = "test.txt";
         }
 
         public void Dispose(object sender, EventArgs e)
         {
-            //try
-            //{
-            //    if (Directory.Exists(unzippedTestPath))
-            //        Directory.Delete(unzippedTestPath, true);
-            //    if (File.Exists(zippedTestPath))
-            //        File.Delete(zippedTestPath);
-            //    if (this.fileWithTest != null)
-            //        this.fileWithTest.Dispose();
-            //}
-            //catch (IOException ex)
-            //{
-            //    MessageBox.Show("Prawdopodobnie inny proces aktualnie używa pliku z testem lub pliku .zip");
-            //}
-            //catch (UnauthorizedAccessException ex)
-            //{
-            //    MessageBox.Show("Problem z prawami dostępu do pliku z testem lub pliku .zip");
-            //}
+            System.Diagnostics.Process.Start(@"C:\Users\maciek\Documents\Visual Studio 2015\Projects\Client_Knowledge_checking\Disposer\bin\Debug\Disposer.exe");
         }
 
+
     }
+
 }

@@ -62,7 +62,7 @@ namespace Client_Knowledge_checking
             if (Utilities.MockedTestFile.isFileMocked)
             {
                 ClientConnection.Instance.InitializeInstance(clientName, ip, portNumber);
-                result = false;
+                result = true;
             }
             else
             {
@@ -82,7 +82,8 @@ namespace Client_Knowledge_checking
             if (Utilities.MockedTestFile.isFileMocked)
             {
                 testFile = new TestFile();
-                testFile.fileWithTest = Utilities.MockedTestFile.fileWithTest;
+                //testFile.fileWithTest = Utilities.MockedTestFile.fileWithTest;
+                System.IO.Directory.CreateDirectory(testFile.unzippedTestPath);
             }
             else
             {
