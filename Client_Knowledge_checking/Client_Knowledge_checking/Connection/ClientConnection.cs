@@ -73,43 +73,38 @@ namespace Client_Knowledge_checking.Connection
                 tcpClient.Connect(serverIpAddress, portNumber);
                 networkStream = tcpClient.GetStream();
                 Byte[] sendBytes = null;
-                sendBytes = Encoding.UTF8.GetBytes(clientName);// Encoding.ASCII.GetBytes(clientName);
+                sendBytes = Encoding.UTF8.GetBytes(clientName);
                 networkStream.Write(sendBytes, 0, sendBytes.Length);
                 networkStream.Flush();
                 GetServerResponse(TypeOfReceivedServerMessage["Response To Logging"]);
                 returnedValue = true;
             }
-            catch(SocketException ex)
+            catch(SocketException)
             {
-                MessageBox.Show(ex + "Wystąpił błąd podczas nawiązywania połączenia");
+                MessageBox.Show("Wystąpił błąd podczas nawiązywania połączenia");
                 returnedValue = false;
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
-                MessageBox.Show(ex + "Z jakichś względów wysłany do serwera bufor jest pusty, spróbuj ponownie");
+                MessageBox.Show("Z jakichś względów wysłany do serwera bufor jest pusty, spróbuj ponownie");
                 returnedValue = false;
             }
-            catch (ArgumentOutOfRangeException ex)
+            catch (ArgumentOutOfRangeException)
             {
-                MessageBox.Show(ex + "Z jakichś względów wysłany do serwera bufor jest zbyt duży, spróbuj ponownie");
+                MessageBox.Show("Z jakichś względów wysłany do serwera bufor jest zbyt duży, spróbuj ponownie");
                 returnedValue = false;
             }
-            catch (IOException ex)
+            catch (IOException)
             {
-                MessageBox.Show(ex + "Wybrane gniazdo zostało wcześniej zamknięte. Poinformuj nauczyciela o zaistniałej sytuacji.");
+                MessageBox.Show("Wybrane gniazdo zostało wcześniej zamknięte. Poinformuj nauczyciela o zaistniałej sytuacji.");
                 returnedValue = false;
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
-                MessageBox.Show(ex + "Problem z odczytem danych z sieci. Ponownie spróbuj nawiązać połączenie");
+                MessageBox.Show("Problem z odczytem danych z sieci. Ponownie spróbuj nawiązać połączenie");
                 returnedValue = false;
             }
             return returnedValue;
-            //do
-            //{
-            //    if (_networkStream.Length != 0)
-            //        GetServerResponse();
-            //} while (_networkStream.Length == 0);
         }
 
         public void GetServerResponse(string desireFeedback)
@@ -132,26 +127,26 @@ namespace Client_Knowledge_checking.Connection
                     networkStream.Flush();
 
                     if (!(myCompleteMessage.ToString() == desireFeedback))
-                        throw new System.Exception("Problem z odebraniem wszystkich danych z serwera");
+                        MessageBox.Show("Problem z odebraniem wszystkich danych z serwera");
                 }
                 else
                 {
                     MessageBox.Show("Zaistniały problemy z komunikacją z klientem");
                 }
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 MessageBox.Show("Bufor wysłany przez serwer jest pusty");
             }
-            catch (ArgumentOutOfRangeException ex)
+            catch (ArgumentOutOfRangeException)
             {
                 MessageBox.Show("Serwer wysłał za duży bufor danych");
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 MessageBox.Show("Wybrane gniazdo zostało wcześniej zakmnięte");
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
                 MessageBox.Show("Problem z odczytem danych z sieci");
             }
@@ -180,7 +175,7 @@ namespace Client_Knowledge_checking.Connection
             return task;
         }
 
-        internal TestFile GetTestFromServer()
+        internal TestFile GetTestFromServer(string clientName)
         {
             Int64 catchedBytes = 0;
             int countOfBytes;
@@ -190,7 +185,7 @@ namespace Client_Knowledge_checking.Connection
             {
                 networkStream.Read(buffer, 0, 8);
                 Int64 numberOfBytes = BitConverter.ToInt64(buffer, 0);
-                testFile = new TestFile();
+                testFile = new TestFile(clientName);
                 AppDomain.CurrentDomain.ProcessExit += new EventHandler(testFile.Dispose);//(testFile.Dispose);
                 Directory.CreateDirectory(testFile.unzippedTestPath);
                 using (var fileWithTest = File.Create(testFile.zippedTestPath))
@@ -207,31 +202,29 @@ namespace Client_Knowledge_checking.Connection
                 MessageBoxResult result = MessageBox.Show("Test został pomyślnie ściągnięty z Serwera", "Rozpocznij Test", MessageBoxButton.OKCancel);
                 if (!(result == MessageBoxResult.OK))
                 {
-                    //TODO: Zaczynamy pracę interpretera, czyli zaczynamy wlasciwy test. Musimy stworzyc instancje timera i odpalac za kazdym razem, gdy pytanie bedzie sie zmieniac
-                    //Interpreter.StartInterpreting(testFile);    
                     testFile.Dispose(null, null);
                     testFile = null;
                 }
             }
-            catch (ArgumentNullException ex)
+            catch (ArgumentNullException)
             {
                 MessageBox.Show("Bufor wysłany przez serwer jest pusty");
                 testFile.Dispose(null, null);
                 testFile = null;
             }
-            catch (ArgumentOutOfRangeException ex)
+            catch (ArgumentOutOfRangeException)
             {
                 MessageBox.Show("Serwer wysłał za duży bufor danych");
                 testFile.Dispose(null, null);
                 testFile = null;
             }
-            catch (IOException ex)
+            catch (IOException)
             {
                 MessageBox.Show("Wybrane gniazdo zostało wcześniej zakmnięte lub wystąpił problem podczas zapisywania pliku z testem na dysku twardym");
                 testFile.Dispose(null, null);
                 testFile = null;
             }
-            catch (ObjectDisposedException ex)
+            catch (ObjectDisposedException)
             {
                 MessageBox.Show("Problem z odczytem danych z sieci");
                 testFile.Dispose(null, null);
@@ -257,19 +250,19 @@ namespace Client_Knowledge_checking.Connection
 
                         Instance.networkStream.Flush();
                     }
-                    catch (ArgumentNullException ex)
+                    catch (ArgumentNullException)
                     {
                         MessageBox.Show("Z niewiadomych przyczyn bufor, w którym powinien się znajdować generowany raport, jest pusty");
                     }
-                    catch (ArgumentOutOfRangeException ex)
+                    catch (ArgumentOutOfRangeException)
                     {
                         MessageBox.Show("Wysyłany raport jest zbyt duży");
                     }
-                    catch (IOException ex)
+                    catch (IOException)
                     {
                         MessageBox.Show("Wybrane gniazdo po stronie klienta zostało wcześniej zakmnięte");
                     }
-                    catch (ObjectDisposedException ex)
+                    catch (ObjectDisposedException)
                     {
                         MessageBox.Show("Problem z odczytem danych z sieci");
                     }
@@ -277,6 +270,5 @@ namespace Client_Knowledge_checking.Connection
             });
             return task;
         }
-
     }
 }

@@ -79,7 +79,7 @@ namespace Client_Knowledge_checking.Test
             if (isImage)
             {
                 Content = content;
-                string[] partsOfContent = content.Split('+');
+                string[] partsOfContent = content.Split('|');
                 if (partsOfContent.Length == 2)
                 {
                     ContentForImageQuestion = partsOfContent[0];

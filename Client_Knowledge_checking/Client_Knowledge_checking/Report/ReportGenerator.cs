@@ -65,10 +65,10 @@ namespace Client_Knowledge_checking.Report
                     listForTab.Add(TypeOfTableRec.źle);
             }
 
-
             if (textQuestionContent != null && imageQuestionContent != null)
             {
-                imageQuestionContent = imageQuestionContent.Substring(8);
+                string[] contentTab = imageQuestionContent.Split(Path.DirectorySeparatorChar);
+                imageQuestionContent = contentTab[2] + "\\" + contentTab[3];
                 InsertProperTags(TypeOfQuestion.isImgIsTxt, textQuestionContent, imageQuestionContent);
             }
             if (textQuestionContent != null && imageQuestionContent == null)
@@ -77,7 +77,8 @@ namespace Client_Knowledge_checking.Report
             }
             if (textQuestionContent == null && imageQuestionContent != null)
             {
-                imageQuestionContent = imageQuestionContent.Substring(8);
+                string[] contentTab = imageQuestionContent.Split(Path.DirectorySeparatorChar);
+                imageQuestionContent = contentTab[2] + "\\" + contentTab[3];
                 InsertProperTags(TypeOfQuestion.isImg, null, imageQuestionContent);
             }
 
@@ -90,7 +91,8 @@ namespace Client_Knowledge_checking.Report
                         if (isAnswerIsImage[index])
                         {
                             writer.WriteLine("<p>" + Checker.tabWithLetters[index] + " " + "</p>");
-                            string answer = ans.Substring(8);
+                            string[] contentTab = ans.Split(Path.DirectorySeparatorChar);
+                            string answer = contentTab[2] + "\\" + contentTab[3];
                             writer.AddAttribute(HtmlTextWriterAttribute.Src, answer);
                             writer.RenderBeginTag(HtmlTextWriterTag.Img);
                             writer.RenderEndTag();

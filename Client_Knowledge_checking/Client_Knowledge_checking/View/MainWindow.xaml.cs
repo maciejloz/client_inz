@@ -16,6 +16,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Client_Knowledge_checking.Test;
 using Client_Knowledge_checking.Connection;
+using Client_Knowledge_checking.Utilities;
+using System.IO;
 
 namespace Client_Knowledge_checking
 {
@@ -25,6 +27,7 @@ namespace Client_Knowledge_checking
     public partial class MainWindow : Window
     {
         LogInWindow logInWindowInstance;
+        string clientName;
         /// <summary>
         /// Konstruktor klasy MainWindow. Inicjalizuje wszystkie kontrolki oraz dodaje metode do event handlera -
         /// jesli nastapi metoda Close() na tej klasie, wowczas wywolana zostanie metoda obslugujaca MainWindow_Closed.
@@ -55,8 +58,9 @@ namespace Client_Knowledge_checking
             logInWindowInstance = logInWindow;
         }
 
-        internal bool Connect(string clientName, IPAddress ip, int portNumber)
+        internal bool Connect(string name, IPAddress ip, int portNumber)
         {
+            clientName = name;
             bool result = false;
 
             if (Utilities.MockedTestFile.isFileMocked)
@@ -81,19 +85,16 @@ namespace Client_Knowledge_checking
 
             if (Utilities.MockedTestFile.isFileMocked)
             {
-                testFile = new TestFile();
-                //testFile.fileWithTest = Utilities.MockedTestFile.fileWithTest;
+                testFile = new TestFile(clientName);
                 System.IO.Directory.CreateDirectory(testFile.unzippedTestPath);
             }
             else
             {
-                Func<TestFile> indicatorToGetTestFromServer = new Func<TestFile>(() => Connection.ClientConnection.Instance.GetTestFromServer());
+                Func<TestFile> indicatorToGetTestFromServer = new Func<TestFile>(() => Connection.ClientConnection.Instance.GetTestFromServer(clientName));
 
                 await ClientConnection.Instance.WaitForTest();
                 testFile = await Task.Run<TestFile>(indicatorToGetTestFromServer);
             }
-            //TestFile testFile = null;
-            //await ClientConnection.Instance.GetTestFromServer();
             if (testFile != null)
                 StartTest(testFile);
             else
@@ -102,6 +103,7 @@ namespace Client_Knowledge_checking
 
         private void StartTest(Test.TestFile testFile)
         {
+            nextQuestion_button.Visibility = Visibility.Visible;
             Test.Interpreter.StartInterpreting(testFile, this);
         }
 
@@ -126,6 +128,7 @@ namespace Client_Knowledge_checking
 
         private void nextQuestion_button_Click(object sender, RoutedEventArgs e)
         {
+
             Interpreter.DisruptTicker();
         }
     }

@@ -10,27 +10,27 @@ namespace Disposer
 {
     class Program
     {
-        public static string unzippedTestPath  = @"C:\test\";
+        public static string unzippedTestPath;
 
         static void Main(string[] args)
         {
             Thread.Sleep(5000);
+            unzippedTestPath = args[0];
             try
             {
                 if (Directory.Exists(unzippedTestPath))
                     Directory.Delete(unzippedTestPath, true);
             }
-            catch (IOException ex)
+            catch (IOException)
             {
-               Console.WriteLine(@"Prawdopodobnie inny proces aktualnie używa pliku z testem lub pliku .zip. Usuń ręcznie katalog: C:\test\ ");
+               Console.WriteLine(@"Prawdopodobnie inny proces aktualnie używa pliku z testem lub pliku .zip. Usuń ręcznie katalog: " + unzippedTestPath);
                 Console.ReadKey();
             }
-            catch (UnauthorizedAccessException ex)
+            catch (UnauthorizedAccessException)
             {
-                Console.WriteLine(@"Problem z prawami dostępu do pliku z testem lub pliku .zip. Usuń ręcznie katalog: C:\test\");
+                Console.WriteLine(@"Problem z prawami dostępu do pliku z testem lub pliku .zip. Usuń ręcznie katalog: " + unzippedTestPath);
                 Console.ReadKey();
             }
-
         }
     }
 }

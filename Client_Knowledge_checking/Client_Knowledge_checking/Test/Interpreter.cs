@@ -22,13 +22,6 @@ namespace Client_Knowledge_checking.Test
         private static bool dispatcherTimerTick = true;
         public static System.Windows.Threading.DispatcherTimer dispatcherTimer;
 
-        //regexp_1_Z:
-        //.*Tresc:"(.*?)", Odpowiedz_A:"(.*?)", Odpowiedz_B:"(.*?)", Odpowiedz_C:"(.*?)", Odpowiedz_D:"(.*?)", Odpowiedz_E:"(.*?)", Prawidlowa:"(.)", Czas:"(\d{2,3})".
-        //regexp_2_O:
-        //.*Tresc:"(.*?)", Czas:"(\d{2,3})".
-        //regexp_3_Rodzaj:
-        //.*"(.)".*
-
         public static void StartInterpreting(TestFile testFile, MainWindow mw)
         {
             mainWindow = mw;
@@ -83,7 +76,7 @@ namespace Client_Knowledge_checking.Test
                 question = new Question(g1_open.ToString(), "open", g2_open.ToString());
                 
             }
-            else//(type == typeOfQuestion.close)
+            else
             {
                 const string patternForCloseQuestion = @".*Tresc:""(.*?)""; Odpowiedz_A:""(.*?)""; Odpowiedz_B:""(.*?)""; Odpowiedz_C:""(.*?)""; Odpowiedz_D:""(.*?)""; Odpowiedz_E:""(.*?)""; Prawidlowa:""(.*?)""; Czas:""(\d{2,3})"".";
                 Regex rExtractForClose = new Regex(patternForCloseQuestion, RegexOptions.IgnoreCase);
@@ -102,7 +95,6 @@ namespace Client_Knowledge_checking.Test
                 answers.Add(g4_close.ToString());
                 answers.Add(g5_close.ToString());
                 answers.Add(g6_close.ToString());
-
 
                 question = new Question(g1_close.ToString(), "close", answers, g7_close.ToString(), g8_close.ToString());
                 answers.Clear();
@@ -129,7 +121,7 @@ namespace Client_Knowledge_checking.Test
             }
             Report.ReportGenerator.Instance.GenerateReport();
             dispatcherTimer.Stop();
-            Report.Checker.presentScore();
+            Report.Checker.PresentScore();
             mainWindow.PrepareTermination();
         }
 
@@ -163,11 +155,5 @@ namespace Client_Knowledge_checking.Test
             dispatcherTimer.Stop();
 
         }
-
-        //private static EventHandler DispatcherTimer_Tick(ref int sumOfTicks)
-        //{
-        //    sumOfTicks += 1;
-        //    return e;
-        //}
     }
 }

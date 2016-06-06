@@ -35,7 +35,6 @@ namespace Client_Knowledge_checking.Report
             }
             else
             {
-                //internal void GetAnswerForQuestion(string textQuestionContent = null, string imageQuestionContent = null, string answerForOpen = null, List<string> answersForClosed = null, string rightAnswersForClosed = null, string realAnswers = null, bool isCorrect = false)
                 string realAnswers = CreateStringWithAnswers(question);
                 bool isCorrect = checkIfCorrect(question, realAnswers);
 
@@ -50,7 +49,7 @@ namespace Client_Knowledge_checking.Report
                 List<bool> isAnswerAsImage = InsertInfoIfAnswerIsImage(question);
 
                 if (question.IsImageQuestionVisible && question.IsTextQuestionVisible)
-                    ReportGenerator.Instance.GetAnswerForQuestion(textContentForOpen, imageContentForOpen, null ,  answersForClosed, question.RightAnswer, realAnswers, isCorrect, isAnswerAsImage);
+                    ReportGenerator.Instance.GetAnswerForQuestion(textContentForOpen, imageContentForOpen, null , answersForClosed, question.RightAnswer, realAnswers, isCorrect, isAnswerAsImage);
                 else if (!question.IsImageQuestionVisible && question.IsTextQuestionVisible)
                     ReportGenerator.Instance.GetAnswerForQuestion(textContentForOpen, null, null, answersForClosed, question.RightAnswer, realAnswers, isCorrect, isAnswerAsImage);
                 else if (question.IsImageQuestionVisible && !question.IsTextQuestionVisible)
@@ -58,7 +57,7 @@ namespace Client_Knowledge_checking.Report
             }
         }
 
-        public static void presentScore()
+        public static void PresentScore()
         {
             if(isTestClosed)
                 MessageBox.Show("Twój wynik to: " + goodAnswers + " pkt na " + allQuestions + ".");
@@ -83,7 +82,6 @@ namespace Client_Knowledge_checking.Report
 
             foreach (Test.Question.Answer ans in question.AnswersProperty)
             {
-                //iter = question.AnswersProperty.IndexOf(ans);
                 if (ans.IsChecked)
                     realAnswer = realAnswer + tabWithLetters[iter] + ',';
                 if (question.AnswersProperty.Last() == ans && realAnswer != "")
@@ -113,8 +111,5 @@ namespace Client_Knowledge_checking.Report
             }
             return ifAnswerIsImage;
         }
-
-
-
     }
 }

@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace Client_Knowledge_checking
 {
     /// <summary>
-    /// Interaction logic for LogInWindow.xaml
+    /// Klasa obługująca okno LogInWindows.xaml
     /// </summary>
     public partial class LogInWindow : Window
     {
@@ -31,7 +31,6 @@ namespace Client_Knowledge_checking
 
         public void StartAgain()
         {
-            //this.Activate();
             this.Show();
             logInWindowStatus = WindowStatus.notToExit;
             mainWindow.Close();
@@ -42,7 +41,7 @@ namespace Client_Knowledge_checking
             IPAddress ip;
             int portNumber;
             string clientName;
-            if (nameAndSurnameTextBox.Text != "" && nameAndSurnameTextBox.Text.Length > 7)
+            if (nameAndSurnameTextBox.Text != "" && nameAndSurnameTextBox.Text.Length >= 7 && nameAndSurnameTextBox.Text.Contains(" "))
             {
                 if (ipNumberTextBox.Text != "" && IPAddress.TryParse(ipNumberTextBox.Text, out ip))
                 {
@@ -55,18 +54,16 @@ namespace Client_Knowledge_checking
                         {
                             mainWindow.Show();
                             mainWindow.GetLogInWindowInstance(this);
-                            //this.Close();
                             this.Hide();
                             logInWindowStatus = WindowStatus.toExit;
                             mainWindow.WaitForTestWrapper();
-                            //StartAgain();
                         }
                     }
-                    catch (OverflowException ex)
+                    catch (OverflowException)
                     {
-                        MessageBox.Show( "Podaj poprawny nr portu, od 0 do 65 000");
+                        MessageBox.Show("Podaj poprawny nr portu, od 0 do 65 000");
                     }
-                    catch (FormatException ex)
+                    catch (FormatException)
                     {
                         MessageBox.Show("Podaj nr portu w poprawnym formacie");
                     }
@@ -74,7 +71,6 @@ namespace Client_Knowledge_checking
                     {
                         MessageBox.Show(ex.ToString());
                     }
-
                 }
                 else
                     MessageBox.Show("Podaj poprawne IP");
@@ -82,6 +78,5 @@ namespace Client_Knowledge_checking
             else
                 MessageBox.Show("Podaj poprawne imię i nazwisko") ;          
         }
-
     }
 }

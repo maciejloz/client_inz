@@ -9,12 +9,11 @@ using System.Windows;
 
 namespace Client_Knowledge_checking.Utilities
 {
-    static class UsableMethods
+    public static class UsableMethods
     {
         public static string zippedTestPath;
         public static string unzippedTestPath;
-        //public static string fileWithTestName = "test.txt";
-        //public static TestFile testFile;
+        public static string clientName;
 
         public static void unzipTest(Test.TestFile testFile)
         {
@@ -44,5 +43,9 @@ namespace Client_Knowledge_checking.Utilities
             return lines;
         }
 
+        public static void TakeInput(string name)
+        {
+            clientName = name;
+        }
     }
 }

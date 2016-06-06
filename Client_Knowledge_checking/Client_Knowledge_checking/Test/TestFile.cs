@@ -16,19 +16,21 @@ namespace Client_Knowledge_checking.Test
         public string fileWithTestName;
         public FileStream fileWithTest;
 
-        public TestFile()
+        public TestFile(string clientName)
         {
-            zippedTestPath = @"C:\test\file_test.zip";
-            unzippedTestPath = @"C:\test\";
-            fileWithTestName = "test.txt";
+            clientName = clientName.Replace(" ", "");
+            zippedTestPath = @"C:\test_" + clientName + @"\file_test.zip";
+            unzippedTestPath = @"C:\test_"+ clientName + @"\";
+            fileWithTestName = "test.tst";
         }
 
         public void Dispose(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(@"C:\Users\maciek\Documents\Visual Studio 2015\Projects\Client_Knowledge_checking\Disposer\bin\Debug\Disposer.exe");
+            var disposerProcess = new System.Diagnostics.Process();
+            disposerProcess.StartInfo.FileName = @"..\..\..\Disposer\bin\Debug\Disposer.exe";
+            disposerProcess.StartInfo.Arguments = unzippedTestPath;
+            disposerProcess.Start();
         }
-
-
     }
 
 }
