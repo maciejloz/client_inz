@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Client_Knowledge_checking"
         mc:Ignorable="d"
         Title="Logowanie" Height="300" Width="300"
-        ResizeMode="NoResize">
+        ResizeMode="CanMinimize">
     <Grid>
         <Label x:Name="nameAndSurname" HorizontalAlignment="Left" VerticalAlignment="Top"
                FontSize="14" Content="Imię i Nazwisko"/>

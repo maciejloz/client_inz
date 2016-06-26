@@ -154,7 +154,6 @@ namespace Client_Knowledge_checking.Connection
             {
                 MessageBox.Show(ex.ToString());
             }
-            
         }
 
         internal Task WaitForTest()

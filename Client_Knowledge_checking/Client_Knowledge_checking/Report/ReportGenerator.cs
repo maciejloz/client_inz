@@ -90,7 +90,7 @@ namespace Client_Knowledge_checking.Report
                     {
                         if (isAnswerIsImage[index])
                         {
-                            writer.WriteLine("<p>" + Checker.tabWithLetters[index] + " " + "</p>");
+                            writer.WriteLine("<p>" + Checker.tabWithLetters[index] + ". " + "</p>");
                             string[] contentTab = ans.Split(Path.DirectorySeparatorChar);
                             string answer = contentTab[2] + "\\" + contentTab[3];
                             writer.AddAttribute(HtmlTextWriterAttribute.Src, answer);
@@ -102,7 +102,7 @@ namespace Client_Knowledge_checking.Report
                             if (ans != "")
                             {
                                 writer.RenderBeginTag(HtmlTextWriterTag.P);
-                                writer.Write(Checker.tabWithLetters[index] + " ");
+                                writer.Write(Checker.tabWithLetters[index] + ". ");
                                 writer.Write(ans);
                                 writer.RenderEndTag();
                             }
@@ -195,7 +195,7 @@ namespace Client_Knowledge_checking.Report
             writer.RenderBeginTag(HtmlTextWriterTag.Table);
             writer.RenderBeginTag(HtmlTextWriterTag.Tr);
 
-            for(int i = 0; i < listForTab.Count; i++)
+            for(int i = 1; i < listForTab.Count+1; i++)
             {
                 writer.RenderBeginTag(HtmlTextWriterTag.Td);
                 writer.Write(i);
@@ -217,7 +217,7 @@ namespace Client_Knowledge_checking.Report
             writer.RenderBeginTag(HtmlTextWriterTag.P);
             writer.AddAttribute(HtmlTextWriterAttribute.Size, "12");
             writer.RenderBeginTag(HtmlTextWriterTag.Font);
-            writer.WriteLine("Student odpowiedział dobrze na " + counterWithGoodAns + ", z " + counterWithClosed + "."   );
+            writer.WriteLine("Student odpowiedział dobrze na " + counterWithGoodAns + " z " + counterWithClosed + " pytań."   );
             writer.WriteLine("</font>");
             writer.WriteLine("</p>");
         }
